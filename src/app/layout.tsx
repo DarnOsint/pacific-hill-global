@@ -45,6 +45,15 @@ export const metadata: Metadata = {
   description:
     "Pacific Hill Global is a diversified business group operating across Africa and beyond: automobile trading, real estate and land, agriculture, mining, logistics and freight forwarding, and importation and general trading.",
   applicationName: companyName,
+  manifest: "/manifest.webmanifest",
+  appleWebApp: {
+    capable: true,
+    title: "PHG Staff",
+    statusBarStyle: "black-translucent",
+  },
+  formatDetection: {
+    telephone: false,
+  },
   openGraph: {
     type: "website",
     siteName: companyName,

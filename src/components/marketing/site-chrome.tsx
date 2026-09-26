@@ -1,6 +1,7 @@
 import type { Route } from "next";
 import Link from "next/link";
 
+import { LogoLockup } from "@/components/brand/logo";
 import { type PublicContact, whatsappDigits } from "@/lib/cms";
 import { cmsHref } from "@/lib/utils";
 import type { BusinessUnitRow, WebsitePageRow } from "@/types/database";
@@ -11,19 +12,6 @@ import type { BusinessUnitRow, WebsitePageRow } from "@/types/database";
  * Navigation is built from `website_pages` rows where `show_in_nav` is true, so
  * adding a page to the menu is a database edit rather than a code change.
  */
-
-function Wordmark({ className = "" }: { className?: string }) {
-  return (
-    <span className={`flex items-baseline gap-2 ${className}`}>
-      <span className="font-display text-[1.0625rem] leading-none tracking-[-0.01em]">
-        Pacific Hill
-      </span>
-      <span className="text-[0.6875rem] font-semibold uppercase leading-none tracking-[0.18em] opacity-70">
-        Global
-      </span>
-    </span>
-  );
-}
 
 /** Typed as `Route` so `typedRoutes` checks these at compile time. */
 const FOOTER_LINKS = [
@@ -49,7 +37,7 @@ export function SiteHeader({
             className="shrink-0 text-ink-900 transition-opacity hover:opacity-70"
             aria-label="Pacific Hill Global — home"
           >
-            <Wordmark />
+            <LogoLockup />
           </Link>
 
           <nav aria-label="Primary" className="hidden items-center gap-7 lg:flex">
@@ -65,9 +53,6 @@ export function SiteHeader({
           </nav>
 
           <div className="flex items-center gap-2">
-            <Link href="/login" className="btn btn-ghost btn-sm hidden sm:inline-flex">
-              Staff sign in
-            </Link>
             <Link href="/contact" className="btn btn-primary btn-sm">
               Contact us
             </Link>
@@ -127,7 +112,7 @@ export function SiteFooter({
       <div className="container-page section-y">
         <div className="grid gap-12 md:grid-cols-12">
           <div className="md:col-span-5">
-            <Wordmark className="text-canvas" />
+            <LogoLockup tone="light" markClassName="h-10 w-10" />
             <p className="mt-5 max-w-sm text-sm leading-relaxed text-ink-300">
               A diversified business group operating across Africa and beyond.
               Long horizons, local knowledge, and a single accountable standard.

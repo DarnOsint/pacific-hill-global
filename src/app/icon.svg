@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Pacific Hill Global">
+  <defs>
+    <linearGradient id="phgField" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#0f2033" />
+      <stop offset="1" stop-color="#050d18" />
+    </linearGradient>
+    <linearGradient id="phgBronze" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ebdbb8" />
+      <stop offset="0.45" stop-color="#d0a054" />
+      <stop offset="1" stop-color="#a26a2a" />
+    </linearGradient>
+  </defs>
+
+  <rect width="512" height="512" rx="112" fill="url(#phgField)" />
+  <rect x="14" y="14" width="484" height="484" rx="100" fill="none" stroke="#d0a054" stroke-opacity="0.22" stroke-width="3" />
+
+  <!-- Pacific Hill: the main summit and its lower shoulder -->
+  <path d="M104 336 L236 132 L300 220 L344 154 L408 336 Z" fill="url(#phgBronze)" />
+
+  <!-- Pacific: horizon swell beneath the ridge -->
+  <path d="M96 404 C150 372 202 432 256 404 C310 376 362 428 416 404"
+        fill="none" stroke="#d0a054" stroke-width="30" stroke-linecap="round" />
+</svg>
