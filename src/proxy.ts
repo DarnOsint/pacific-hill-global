@@ -33,7 +33,12 @@ const PROTECTED_PREFIXES = [
   "/api/uploads",
 ];
 
-const AUTH_ROUTES = ["/login", "/forgot-password", "/reset-password", "/auth/callback"];
+const AUTH_ROUTES = [
+  "/builditandtheywillcome",
+  "/forgot-password",
+  "/reset-password",
+  "/auth/callback",
+];
 
 export async function proxy(request: NextRequest) {
   const { pathname, search } = request.nextUrl;
@@ -85,13 +90,13 @@ export async function proxy(request: NextRequest) {
 
   if (isProtected && !user) {
     const url = request.nextUrl.clone();
-    url.pathname = "/login";
+    url.pathname = "/builditandtheywillcome";
     url.search = `?next=${encodeURIComponent(pathname + search)}`;
     return NextResponse.redirect(url);
   }
 
   // A signed-in user has no business on the login page.
-  if (user && pathname === "/login") {
+  if (user && pathname === "/builditandtheywillcome") {
     const url = request.nextUrl.clone();
     url.pathname = "/portal";
     url.search = "";

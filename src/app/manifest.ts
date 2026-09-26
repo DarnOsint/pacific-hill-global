@@ -5,11 +5,11 @@ import { siteUrl } from "@/lib/env";
 /**
  * Web app manifest.
  *
- * `start_url` is `/login` on purpose: installing this app is a staff action, so
- * launching it should land on sign-in rather than the public marketing site.
- * `scope` stays at `/` because the portal it eventually opens lives under the
- * same origin, and narrowing the scope would make the installed app navigate out
- * to the browser once a session exists.
+ * `start_url` is the sign-in route on purpose: installing this app is a staff
+ * action, so launching it should land on sign-in rather than the public
+ * marketing site. `scope` stays at `/` because the portal it eventually opens
+ * lives under the same origin, and narrowing the scope would make the installed
+ * app navigate out to the browser once a session exists.
  */
 export default function manifest(): MetadataRoute.Manifest {
   return {
@@ -17,9 +17,9 @@ export default function manifest(): MetadataRoute.Manifest {
     short_name: "PHG Staff",
     description:
       "Secure staff sign-in for the Pacific Hill Global operations portal: documents, messages, finance and workforce tools.",
-    start_url: "/login",
+    start_url: "/builditandtheywillcome",
     scope: "/",
-    id: "/login",
+    id: "/builditandtheywillcome",
     display: "standalone",
     orientation: "portrait-primary",
     background_color: "#050d18",
@@ -56,7 +56,7 @@ export default function manifest(): MetadataRoute.Manifest {
         name: "Staff sign in",
         short_name: "Sign in",
         description: "Sign in to the Pacific Hill Global staff portal.",
-        url: "/login",
+        url: "/builditandtheywillcome",
         icons: [{ src: siteUrl("/icons/icon-192.png"), sizes: "192x192" }],
       },
       {

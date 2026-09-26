@@ -139,7 +139,7 @@ export function SiteFooter({
             </div>
           </div>
 
-          <div className="md:col-span-3">
+          <div className="md:col-span-4">
             <h2 className="text-2xs font-semibold uppercase tracking-[0.16em] text-bronze-300">
               Our businesses
             </h2>
@@ -157,7 +157,7 @@ export function SiteFooter({
             </ul>
           </div>
 
-          <div className="md:col-span-2">
+          <div className="md:col-span-3">
             <h2 className="text-2xs font-semibold uppercase tracking-[0.16em] text-bronze-300">
               Company
             </h2>
@@ -172,19 +172,6 @@ export function SiteFooter({
                   </Link>
                 </li>
               ))}
-            </ul>
-          </div>
-
-          <div className="md:col-span-2">
-            <h2 className="text-2xs font-semibold uppercase tracking-[0.16em] text-bronze-300">
-              Employees
-            </h2>
-            <ul className="mt-5 space-y-2.5 text-sm">
-              <li>
-                <Link href="/login" className="text-ink-300 transition-colors hover:text-canvas">
-                  Staff sign in
-                </Link>
-              </li>
             </ul>
           </div>
         </div>

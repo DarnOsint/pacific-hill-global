@@ -257,7 +257,7 @@ export async function guardPage(
 
   if (!ctx) {
     const target = safeNextPath(nextPath, "/portal");
-    redirect(appRoute(`/login?next=${encodeURIComponent(target)}`));
+    redirect(appRoute(`/builditandtheywillcome?next=${encodeURIComponent(target)}`));
   }
 
   if (ctx.accountStatus !== "active") {

@@ -5,9 +5,10 @@ import { siteUrl } from "@/lib/env";
 /**
  * Robots rules for the public marketing site.
  *
- * Staff surfaces are disallowed so /login, /portal and /admin never appear in
- * search results. The CMS page slugs are intentionally not enumerated here —
- * they are seeded and can change, so the sitemap is the authoritative list.
+ * Staff surfaces are disallowed so the sign-in route, /portal and /admin never
+ * appear in search results. The CMS page slugs are intentionally not enumerated
+ * here — they are seeded and can change, so the sitemap is the authoritative
+ * list.
  */
 export default function robots(): MetadataRoute.Robots {
   return {
@@ -15,7 +16,7 @@ export default function robots(): MetadataRoute.Robots {
       {
         userAgent: "*",
         allow: "/",
-        disallow: ["/login", "/portal", "/admin", "/reports", "/api/"],
+        disallow: ["/builditandtheywillcome", "/portal", "/admin", "/reports", "/api/"],
       },
     ],
     sitemap: siteUrl("/sitemap.xml"),

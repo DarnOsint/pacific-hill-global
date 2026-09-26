@@ -17,5 +17,5 @@ export async function signOut(): Promise<void> {
   const supabase = await createServerClient();
   await supabase?.auth.signOut();
 
-  redirect(appRoute("/login"));
+  redirect(appRoute("/builditandtheywillcome"));
 }

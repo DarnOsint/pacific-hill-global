@@ -38,7 +38,7 @@ export default function AccountSuspendedPage() {
           <Link href="/contact" className="btn btn-primary">
             Contact us
           </Link>
-          <Link href="/login" className="btn btn-ghost">
+          <Link href="/builditandtheywillcome" className="btn btn-ghost">
             Back to sign in
           </Link>
         </div>
