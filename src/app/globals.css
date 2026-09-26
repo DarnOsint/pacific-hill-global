@@ -1,0 +1,653 @@
+@import "tailwindcss";
+
+/* =============================================================================
+   Pacific Hill Global — design system
+
+   The company is a diversified business group, so the visual language is
+   corporate rather than vertical: a deep navy ink, a single restrained bronze
+   accent, warm neutrals, and a serif display face for authority paired with a
+   grotesque for data legibility. Sector colours are supplied per business unit
+   from the database (business_units.accent_color) and are used only inside
+   sector contexts, never to redefine the brand.
+
+   Rules:
+   - No gradients used as decoration. Depth comes from tone and hairline rules.
+   - Motion is short (150–320ms) and never blocks reading.
+   - Every interactive element has a visible focus ring.
+   ========================================================================== */
+
+@theme {
+  /* ---- Type ------------------------------------------------------------- */
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, -apple-system,
+    "Segoe UI", sans-serif;
+  --font-display: var(--font-newsreader), ui-serif, Georgia, "Times New Roman",
+    serif;
+  --font-mono: var(--font-mono-jet), ui-monospace, "SFMono-Regular", monospace;
+
+  --text-2xs: 0.6875rem;
+  --text-2xs--line-height: 1rem;
+  --text-xs: 0.75rem;
+  --text-xs--line-height: 1.125rem;
+  --text-sm: 0.875rem;
+  --text-sm--line-height: 1.375rem;
+  --text-base: 1rem;
+  --text-base--line-height: 1.625rem;
+  --text-lg: 1.125rem;
+  --text-lg--line-height: 1.75rem;
+  --text-xl: 1.25rem;
+  --text-xl--line-height: 1.8125rem;
+  --text-2xl: 1.5rem;
+  --text-2xl--line-height: 2rem;
+  --text-3xl: 1.875rem;
+  --text-3xl--line-height: 2.25rem;
+  --text-4xl: 2.25rem;
+  --text-4xl--line-height: 2.5rem;
+  --text-5xl: 3rem;
+  --text-5xl--line-height: 1.1;
+  --text-6xl: 3.75rem;
+  --text-6xl--line-height: 1.05;
+  --text-7xl: 4.5rem;
+  --text-7xl--line-height: 1;
+  --text-8xl: 6rem;
+  --text-8xl--line-height: 0.95;
+
+  /* ---- Brand ink --------------------------------------------------------- */
+  --color-ink-50: #f4f7fa;
+  --color-ink-100: #e4ebf2;
+  --color-ink-200: #c6d5e4;
+  --color-ink-300: #9bb3cc;
+  --color-ink-400: #6789ab;
+  --color-ink-500: #456b90;
+  --color-ink-600: #345478;
+  --color-ink-700: #2a435f;
+  --color-ink-800: #1c3247;
+  --color-ink-900: #0f2033;
+  --color-ink-950: #081322;
+  --color-ink-975: #050d18;
+
+  /* ---- Accent (bronze) --------------------------------------------------- */
+  --color-bronze-50: #fbf8f1;
+  --color-bronze-100: #f5eddc;
+  --color-bronze-200: #ebdbb8;
+  --color-bronze-300: #dec089;
+  --color-bronze-400: #d0a054;
+  --color-bronze-500: #c08537;
+  --color-bronze-600: #a26a2a;
+  --color-bronze-700: #835124;
+  --color-bronze-800: #6b4322;
+  --color-bronze-900: #5a381f;
+  --color-bronze-950: #321d0f;
+
+  /* ---- Neutrals ---------------------------------------------------------- */
+  --color-sand-50: #faf9f7;
+  --color-sand-100: #f4f2ef;
+  --color-sand-200: #e8e5e0;
+  --color-sand-300: #d6d1c9;
+  --color-sand-400: #b0a99e;
+  --color-sand-500: #8a8377;
+  --color-sand-600: #6d675d;
+  --color-sand-700: #55504a;
+  --color-sand-800: #454140;
+  --color-sand-900: #262525;
+  --color-sand-950: #141313;
+
+  /* ---- Semantic ---------------------------------------------------------- */
+  --color-positive: #15803d;
+  --color-positive-soft: #dcfce7;
+  --color-caution: #b45309;
+  --color-caution-soft: #fef3c7;
+  --color-critical: #b91c1c;
+  --color-critical-soft: #fee2e2;
+  --color-info: #1d4ed8;
+  --color-info-soft: #dbeafe;
+
+  /* ---- Surfaces ---------------------------------------------------------- */
+  --color-canvas: #ffffff;
+  --color-surface: #ffffff;
+  --color-surface-muted: var(--color-sand-50);
+  --color-hairline: var(--color-sand-200);
+  --color-hairline-strong: var(--color-sand-300);
+
+  /* ---- Radius ------------------------------------------------------------ */
+  --radius-xs: 0.25rem;
+  --radius-sm: 0.375rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+  --radius-2xl: 1.25rem;
+
+  /* ---- Elevation: subtle, layered, never a heavy drop shadow --------------- */
+  --shadow-xs: 0 1px 2px 0 rgb(8 19 34 / 0.05);
+  --shadow-sm: 0 1px 3px 0 rgb(8 19 34 / 0.07), 0 1px 2px -1px rgb(8 19 34 / 0.05);
+  --shadow-md: 0 4px 12px -2px rgb(8 19 34 / 0.08), 0 2px 4px -2px rgb(8 19 34 / 0.05);
+  --shadow-lg: 0 12px 28px -6px rgb(8 19 34 / 0.12), 0 4px 8px -4px rgb(8 19 34 / 0.06);
+  --shadow-focus: 0 0 0 3px rgb(192 133 55 / 0.28);
+
+  /* ---- Motion ------------------------------------------------------------ */
+  --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
+  --animate-fade-up: fade-up 0.4s var(--ease-out-soft) both;
+  --animate-fade-in: fade-in 0.3s var(--ease-out-soft) both;
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes shimmer {
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+@layer base {
+  * {
+    border-color: var(--color-hairline);
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: smooth;
+    scroll-padding-top: 5rem;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+
+  body {
+    background-color: var(--color-canvas);
+    color: var(--color-ink-900);
+    font-family: var(--font-sans);
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* Display type: the serif carries authority on the marketing surface only. */
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display);
+    font-weight: 400;
+    letter-spacing: -0.015em;
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  /* Financial figures must align in columns. */
+  .tabular,
+  table td,
+  table th {
+    font-variant-numeric: tabular-nums;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-bronze-500);
+    outline-offset: 2px;
+    border-radius: var(--radius-xs);
+  }
+
+  ::selection {
+    background-color: var(--color-bronze-200);
+    color: var(--color-ink-950);
+  }
+
+  /* Consistent, restrained scrollbars in the portal surfaces. */
+  .scrollbar-thin {
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-sand-300) transparent;
+  }
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    background-color: var(--color-sand-300);
+    border-radius: 9999px;
+  }
+  .scrollbar-thin::-webkit-scrollbar-track {
+    background: transparent;
+  }
+}
+
+@layer components {
+  /* ---- Layout primitives -------------------------------------------------- */
+  .container-page {
+    width: 100%;
+    margin-inline: auto;
+    padding-inline: 1.25rem;
+    max-width: 84rem;
+  }
+  @media (min-width: 768px) {
+    .container-page {
+      padding-inline: 2rem;
+    }
+  }
+  @media (min-width: 1280px) {
+    .container-page {
+      padding-inline: 2.5rem;
+    }
+  }
+
+  .container-narrow {
+    width: 100%;
+    margin-inline: auto;
+    padding-inline: 1.25rem;
+    max-width: 48rem;
+  }
+
+  .section-y {
+    padding-block: 4rem;
+  }
+  @media (min-width: 768px) {
+    .section-y {
+      padding-block: 6rem;
+    }
+  }
+  @media (min-width: 1280px) {
+    .section-y {
+      padding-block: 7.5rem;
+    }
+  }
+
+  /* ---- Typographic helpers ----------------------------------------------- */
+  .eyebrow {
+    font-size: var(--text-2xs);
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--color-ink-500);
+  }
+
+  .eyebrow-on-dark {
+    color: var(--color-bronze-300);
+  }
+
+  .lede {
+    font-size: var(--text-lg);
+    line-height: 1.65;
+    color: var(--color-ink-600);
+  }
+
+  .display-hero {
+    font-family: var(--font-display);
+    font-size: clamp(2.5rem, 6vw, 4.5rem);
+    line-height: 1.03;
+    letter-spacing: -0.028em;
+  }
+
+  .display-section {
+    font-family: var(--font-display);
+    font-size: clamp(1.875rem, 3.6vw, 3rem);
+    line-height: 1.1;
+    letter-spacing: -0.022em;
+  }
+
+  /* ---- Surfaces ----------------------------------------------------------- */
+  .surface-card {
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-hairline);
+    border-radius: var(--radius-lg);
+  }
+
+  .hairline-top {
+    border-top: 1px solid var(--color-hairline);
+  }
+
+  .rule-accent {
+    width: 2.5rem;
+    height: 2px;
+    background-color: var(--color-bronze-500);
+  }
+
+  /* ---- Buttons ------------------------------------------------------------ */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    border-radius: var(--radius-sm);
+    font-size: var(--text-sm);
+    font-weight: 600;
+    line-height: 1;
+    white-space: nowrap;
+    transition:
+      background-color 0.18s var(--ease-out-soft),
+      border-color 0.18s var(--ease-out-soft),
+      color 0.18s var(--ease-out-soft),
+      box-shadow 0.18s var(--ease-out-soft);
+    cursor: pointer;
+  }
+  .btn:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+  }
+
+  .btn-md {
+    height: 2.5rem;
+    padding-inline: 1rem;
+  }
+  .btn-sm {
+    height: 2rem;
+    padding-inline: 0.75rem;
+    font-size: var(--text-xs);
+  }
+  .btn-lg {
+    height: 3rem;
+    padding-inline: 1.5rem;
+    font-size: var(--text-base);
+  }
+  .btn-icon {
+    height: 2.25rem;
+    width: 2.25rem;
+    padding: 0;
+  }
+
+  .btn-primary {
+    background-color: var(--color-ink-900);
+    color: var(--color-canvas);
+  }
+  .btn-primary:hover:not(:disabled) {
+    background-color: var(--color-ink-800);
+  }
+
+  .btn-accent {
+    background-color: var(--color-bronze-500);
+    color: var(--color-ink-975);
+  }
+  .btn-accent:hover:not(:disabled) {
+    background-color: var(--color-bronze-400);
+  }
+
+  .btn-outline {
+    border: 1px solid var(--color-hairline-strong);
+    background-color: transparent;
+    color: var(--color-ink-800);
+  }
+  .btn-outline:hover:not(:disabled) {
+    background-color: var(--color-sand-50);
+    border-color: var(--color-sand-400);
+  }
+
+  .btn-outline-on-dark {
+    border: 1px solid rgb(255 255 255 / 0.28);
+    color: var(--color-canvas);
+  }
+  .btn-outline-on-dark:hover:not(:disabled) {
+    background-color: rgb(255 255 255 / 0.1);
+    border-color: rgb(255 255 255 / 0.5);
+  }
+
+  .btn-ghost {
+    color: var(--color-ink-700);
+  }
+  .btn-ghost:hover:not(:disabled) {
+    background-color: var(--color-sand-100);
+  }
+
+  .btn-danger {
+    background-color: var(--color-critical);
+    color: var(--color-canvas);
+  }
+  .btn-danger:hover:not(:disabled) {
+    background-color: #991616;
+  }
+
+  /* ---- Forms -------------------------------------------------------------- */
+  .field-label {
+    display: block;
+    font-size: var(--text-xs);
+    font-weight: 600;
+    color: var(--color-ink-700);
+    margin-bottom: 0.375rem;
+  }
+
+  .field-input {
+    display: block;
+    width: 100%;
+    height: 2.5rem;
+    padding-inline: 0.75rem;
+    font-size: var(--text-sm);
+    color: var(--color-ink-900);
+    background-color: var(--color-canvas);
+    border: 1px solid var(--color-hairline-strong);
+    border-radius: var(--radius-sm);
+    transition:
+      border-color 0.16s var(--ease-out-soft),
+      box-shadow 0.16s var(--ease-out-soft);
+  }
+  .field-input::placeholder {
+    color: var(--color-sand-400);
+  }
+  .field-input:hover:not(:disabled) {
+    border-color: var(--color-sand-400);
+  }
+  .field-input:focus {
+    outline: none;
+    border-color: var(--color-bronze-500);
+    box-shadow: var(--shadow-focus);
+  }
+  .field-input:disabled {
+    background-color: var(--color-sand-50);
+    color: var(--color-sand-500);
+    cursor: not-allowed;
+  }
+  .field-input[aria-invalid="true"] {
+    border-color: var(--color-critical);
+  }
+  .field-input[aria-invalid="true"]:focus {
+    box-shadow: 0 0 0 3px rgb(185 28 28 / 0.18);
+  }
+
+  textarea.field-input {
+    height: auto;
+    min-height: 6rem;
+    padding-block: 0.5rem;
+    line-height: 1.55;
+    resize: vertical;
+  }
+
+  select.field-input {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236d675d' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.625rem center;
+    padding-right: 2rem;
+  }
+
+  .field-hint {
+    font-size: var(--text-xs);
+    color: var(--color-ink-500);
+    margin-top: 0.3125rem;
+  }
+  .field-error {
+    font-size: var(--text-xs);
+    color: var(--color-critical);
+    margin-top: 0.3125rem;
+  }
+
+  /* ---- Tables -------------------------------------------------------------- */
+  .data-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    font-size: var(--text-sm);
+  }
+  .data-table thead th {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    background-color: var(--color-sand-50);
+    text-align: left;
+    font-size: var(--text-2xs);
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-ink-500);
+    padding: 0.625rem 0.875rem;
+    border-bottom: 1px solid var(--color-hairline);
+    white-space: nowrap;
+  }
+  .data-table tbody td {
+    padding: 0.75rem 0.875rem;
+    border-bottom: 1px solid var(--color-hairline);
+    color: var(--color-ink-800);
+    vertical-align: middle;
+  }
+  .data-table tbody tr:last-child td {
+    border-bottom: 0;
+  }
+  .data-table tbody tr:hover td {
+    background-color: var(--color-sand-50);
+  }
+  .data-table tbody tr[data-selected="true"] td {
+    background-color: var(--color-bronze-50);
+  }
+
+  /* ---- Badges -------------------------------------------------------------- */
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3125rem;
+    height: 1.375rem;
+    padding-inline: 0.5rem;
+    border-radius: 9999px;
+    font-size: var(--text-2xs);
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+  }
+  .badge-neutral {
+    background-color: var(--color-sand-100);
+    color: var(--color-ink-700);
+  }
+  .badge-positive {
+    background-color: var(--color-positive-soft);
+    color: var(--color-positive);
+  }
+  .badge-caution {
+    background-color: var(--color-caution-soft);
+    color: var(--color-caution);
+  }
+  .badge-critical {
+    background-color: var(--color-critical-soft);
+    color: var(--color-critical);
+  }
+  .badge-info {
+    background-color: var(--color-info-soft);
+    color: var(--color-info);
+  }
+  .badge-bronze {
+    background-color: var(--color-bronze-100);
+    color: var(--color-bronze-800);
+  }
+
+  /* ---- Misc ---------------------------------------------------------------- */
+  .skeleton {
+    position: relative;
+    overflow: hidden;
+    background-color: var(--color-sand-100);
+    border-radius: var(--radius-sm);
+  }
+  .skeleton::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    transform: translateX(-100%);
+    background-image: linear-gradient(
+      90deg,
+      transparent,
+      rgb(255 255 255 / 0.6),
+      transparent
+    );
+    animation: shimmer 1.6s infinite;
+  }
+
+  .prose-phg {
+    color: var(--color-ink-700);
+    line-height: 1.75;
+  }
+  .prose-phg p + p {
+    margin-top: 1rem;
+  }
+  .prose-phg h2 {
+    font-family: var(--font-display);
+    font-size: var(--text-2xl);
+    color: var(--color-ink-900);
+    margin-top: 2.5rem;
+    margin-bottom: 0.875rem;
+  }
+  .prose-phg h3 {
+    font-family: var(--font-display);
+    font-size: var(--text-xl);
+    color: var(--color-ink-900);
+    margin-top: 2rem;
+    margin-bottom: 0.75rem;
+  }
+  .prose-phg ul,
+  .prose-phg ol {
+    margin-top: 1rem;
+    padding-left: 1.25rem;
+    list-style: disc;
+  }
+  .prose-phg li + li {
+    margin-top: 0.5rem;
+  }
+  .prose-phg a {
+    color: var(--color-ink-900);
+    text-decoration: underline;
+    text-decoration-color: var(--color-bronze-400);
+    text-underline-offset: 3px;
+  }
+  .prose-phg strong {
+    color: var(--color-ink-900);
+    font-weight: 600;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  /* Sticky page header offset for the portal sidebar layout. */
+  .scroll-pt-header {
+    scroll-padding-top: 4.5rem;
+  }
+}
