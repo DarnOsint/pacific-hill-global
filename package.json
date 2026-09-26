@@ -11,6 +11,7 @@
     "typecheck": "tsc --noEmit",
     "check": "npm run typecheck && npm run lint",
     "db:validate": "bash scripts/validate-migrations.sh",
+    "db:seed": "bash scripts/apply-seeds.sh",
     "test:rbac": "node scripts/check-permissions.mjs",
     "test": "npm run typecheck && npm run test:rbac"
   },

@@ -19,6 +19,7 @@ import { serverEnv } from "@/lib/env.server";
 import type { Permission, Scope, UserContext } from "@/lib/rbac/permissions";
 import { can, canForUnit } from "@/lib/rbac/permissions";
 import type { MyPermissionsResult } from "@/types/database";
+import { appRoute } from "@/lib/utils";
 
 /* -------------------------------------------------------------------------- */
 /* Errors                                                                      */
@@ -256,15 +257,15 @@ export async function guardPage(
 
   if (!ctx) {
     const target = safeNextPath(nextPath, "/portal");
-    redirect((`/login?next=${encodeURIComponent(target)}`) as any);
+    redirect(appRoute(`/login?next=${encodeURIComponent(target)}`));
   }
 
   if (ctx.accountStatus !== "active") {
-    redirect("/account-suspended" as any);
+    redirect(appRoute("/account-suspended"));
   }
 
   if (permissions.length > 0 && !can(ctx, ...permissions)) {
-    redirect("/forbidden" as any);
+    redirect(appRoute("/forbidden"));
   }
 
   return ctx;

@@ -111,8 +111,10 @@ select
   2015,
   'USD',
   'info@pacifichillglobal.com',
-  '+211 000 000 000',
-  '+211 000 000 000',
+  -- `phone` is intentionally null: the group takes enquiries on WhatsApp only.
+  -- A `tel:` link to a number that is never answered is worse than no link.
+  null,
+  '+61 412 627 024',
   'Central Business District, Juba',
   'Juba',
   'South Sudan'

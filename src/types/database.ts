@@ -1471,6 +1471,42 @@ export type FinanceSummaryRow = {
   net_result: number;
 };
 
+/**
+ * `public.public_contact` — the publishable projection of `company_settings`.
+ *
+ * Deliberately narrower than `CompanySettingsRow`: the tax number, registration
+ * number, base currency, approval threshold and feature flags are not on this
+ * view and must not be added to it.
+ */
+export type PublicContactRow = {
+  company_name: string | null;
+  legal_name: string | null;
+  tagline: string | null;
+  description: string | null;
+  founded_year: number | null;
+  email: string | null;
+  phone: string | null;
+  whatsapp: string | null;
+  address: string | null;
+  city: string | null;
+  country: string | null;
+  logo_url: string | null;
+  social_links: Json;
+};
+
+/**
+ * `public.public_org_units` — a department on the public org chart. Carries no
+ * `head_id`, so naming a department never identifies an employee.
+ */
+export type PublicOrgUnitRow = {
+  id: string;
+  code: string;
+  name: string;
+  description: string | null;
+  parent_code: string | null;
+  sort_order: number;
+};
+
 export type DashboardCountersRow = {
   my_open_tasks: number;
   my_overdue_tasks: number;
@@ -1628,6 +1664,8 @@ export type Database = {
       mining_financials: View<MiningFinancialRow>;
       finance_summary: View<FinanceSummaryRow>;
       dashboard_counters: View<DashboardCountersRow>;
+      public_contact: View<PublicContactRow>;
+      public_org_units: View<PublicOrgUnitRow>;
     };
     Functions: {
       get_my_permissions: { Args: Record<PropertyKey, never>; Returns: MyPermissionsResult };

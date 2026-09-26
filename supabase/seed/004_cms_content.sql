@@ -9,7 +9,7 @@
 -- ---------------------------------------------------------------------------
 insert into public.website_pages (slug, title, subtitle, template, status, is_system, show_in_nav, nav_label, nav_order, published_at)
 values
-('',        'Pacific Hill Global',            'Diversified business. Enduring value.',        'homepage', 'published', true,  true,  'Home',      10, now()),
+('homepage',  'Pacific Hill Global',            'Diversified business. Enduring value.',        'homepage', 'published', true,  true,  'Home',      10, now()),
 ('about',    'About Pacific Hill Global',     'Who we are and how we operate',                  'standard', 'published', true,  true,  'About',     20, now()),
 ('businesses','Our Businesses',               'Six operating sectors, one accountable group',   'listing',  'published', true,  true,  'Businesses',30, now()),
 ('news',     'News & Updates',                'Announcements from across the group',           'listing',  'published', true,  true,  'News',      40, now()),
@@ -31,12 +31,13 @@ begin
   end loop;
 end $$;
 
--- Public inventory / listings pages.
-insert into public.website_pages (slug, title, subtitle, template, status, is_system, show_in_nav, nav_label, nav_order, published_at)
-values
-('vehicles',   'Vehicle Inventory', 'Vehicles available for sale',            'listing', 'published', false, true, 'Vehicles',  25, now()),
-('properties', 'Property Listings', 'Land, homes and commercial properties',  'listing', 'published', false, true, 'Properties',27, now())
-on conflict (slug) do update set title = excluded.title;
+-- The earlier draft shipped standalone `vehicles` and `properties` listing
+-- pages. Both are superseded: inventory now lives on the per-business-unit
+-- pages under /businesses/<slug>, and the primary nav links to /businesses.
+-- Leaving these rows in place put two visible nav links in front of 404s, so
+-- they are removed here. `on conflict do update` above cannot express a delete,
+-- hence the explicit delete for re-runnable seeds.
+delete from public.website_pages where slug in ('vehicles', 'properties');
 
 -- ---------------------------------------------------------------------------
 -- Homepage sections
@@ -152,7 +153,7 @@ select p.id, v.section_key, v.section_type, v.eyebrow, v.heading, v.subheading,
   ) as v(section_key, section_type, eyebrow, heading, subheading, summary, content,
         cta_label, cta_href, secondary_cta_label, secondary_cta_href,
         background, layout, sort_order, is_required)
- where p.slug = ''
+ where p.slug = 'homepage'
 on conflict (page_id, section_key) do update
    set heading = excluded.heading,
        subheading = excluded.subheading,
@@ -212,7 +213,9 @@ values
 ('Properties transacted',   380,   '+', 'building',  40, true),
 ('Years operating',         10,    '+', 'calendar',  50, true),
 ('Employees',               120,   '+', 'users',     60, true)
-on conflict do nothing;
+-- Conflict target must name the unique index created in 0017, otherwise
+-- `do nothing` suppresses nothing and re-running this seed duplicates the rows.
+on conflict (label) where deleted_at is null do nothing;
 
 -- ---------------------------------------------------------------------------
 -- Testimonials (clearly illustrative; the Director edits or removes these)
@@ -225,4 +228,108 @@ values
  'Land acquisition client', 'Director', 'Agribusiness group', 5, 'published', 20),
 ('Clear communication throughout a long import. Every cost was shown to us as it was incurred, which is exactly what we needed.',
  'Import client', 'Managing Director', 'Retail group', 5, 'published', 30)
-on conflict do nothing;
+on conflict (author_name, sort_order) where deleted_at is null do nothing;
+
+-- ---------------------------------------------------------------------------
+-- Legal and contact page content
+--
+-- These pages exist as `website_pages` rows but shipped with no sections, so
+-- every one of them rendered the "coming soon" empty state on a live domain.
+-- Sections are added here for the same key-on-(page_id, section_key) reason as
+-- above, which keeps the seed re-runnable.
+-- ---------------------------------------------------------------------------
+
+-- Privacy policy: one page-hero to carry the title, one prose block for the
+-- substance. Written as a real notice rather than a placeholder so the page is
+-- publishable; review with counsel before relying on it commercially.
+insert into public.website_sections
+  (page_id, section_key, section_type, eyebrow, heading, subheading, content, background, layout, sort_order, is_required, is_visible)
+select p.id, v.section_key, v.section_type, v.eyebrow, v.heading, v.subheading,
+       v.content, v.background, v.layout, v.sort_order, v.is_required, true
+  from public.website_pages p
+  cross join (values
+  ('page-hero','page-hero',null,
+   'Privacy Policy',
+   'How we handle information',
+   null,
+   jsonb_build_object('lead','This policy explains what information Pacific Hill Global collects through this website, why we collect it, and the choices available to you.'),
+   'dark','default',10,false),
+
+  ('privacy-terms','prose',null,
+   'What we collect',
+   'Information you give us, and information we observe',
+   null,
+   jsonb_build_object(
+     'lead','We collect only what is needed to respond to an enquiry, to operate the staff portal, or to meet a legal obligation. We do not sell personal information.',
+     'body', E'You provide information when you contact us — typically your name, email address, phone number and the substance of your enquiry. If you are a staff user, we hold the account details needed to identify you and to record your activity.\n\nWe also record limited technical information, such as the IP address and time of a request, for security and to investigate abuse.\n\nEnquiries submitted through this site are routed to the relevant operating business and retained only as long as needed to deal with the matter.'
+   ),
+   'muted','default',20,false),
+
+  ('privacy-use','prose',null,
+   'How we use it',
+   'Purpose and lawful basis',
+   null,
+   jsonb_build_object(
+     'body', E'We use your information to respond to you, to manage your access to the staff portal, to maintain the security of our systems, and to meet record-keeping requirements.\n\nWe do not use enquiry data for automated decision-making, and we do not share it with third parties for their own purposes. Where a service provider processes data on our behalf — for example an email or hosting provider — they are bound to use it only for us.'
+   ),
+   'default','default',30,false),
+
+  ('privacy-rights','prose',null,
+   'Your rights',
+   'Access, correction and deletion',
+   null,
+   jsonb_build_object(
+     'body', E'You may ask us what information we hold about you, request corrections, or ask for it to be deleted where we are not required to keep it. Write to the email address in the footer and we will respond within a reasonable period.\n\nIf you are a staff user, most of your details can be reviewed and updated from your own profile in the portal.'
+   ),
+   'muted','default',40,false)
+  ) as v(section_key, section_type, eyebrow, heading, subheading, summary, content, background, layout, sort_order, is_required)
+ where p.slug = 'legal/privacy'
+on conflict (page_id, section_key) do update
+   set heading = excluded.heading, subheading = excluded.subheading,
+       content = excluded.content, sort_order = excluded.sort_order;
+
+-- Terms of use.
+insert into public.website_sections
+  (page_id, section_key, section_type, eyebrow, heading, subheading, content, background, layout, sort_order, is_required, is_visible)
+select p.id, v.section_key, v.section_type, v.eyebrow, v.heading, v.subheading,
+       v.content, v.background, v.layout, v.sort_order, v.is_required, true
+  from public.website_pages p
+  cross join (values
+  ('page-hero','page-hero',null,
+   'Terms of Use',
+   'The terms that govern use of this site',
+   null,
+   jsonb_build_object('lead','By using this website you agree to these terms. If you do not accept them, please do not use the site.'),
+   'dark','default',10,false),
+
+  ('terms-use','prose',null,
+   'Permitted use',
+   'What you may and may not do',
+   null,
+   jsonb_build_object(
+     'body', E'You may read this site and contact us through it. You may not attempt to gain unauthorised access to any part of the site or its underlying systems, disrupt its operation, or use it to transmit unlawful or harmful material.\n\nAutomated extraction of content at a rate that degrades the service for others is not permitted.'
+   ),
+   'muted','default',20,false),
+
+  ('terms-information','prose',null,
+   'Information on this site',
+   'Not investment, legal or financial advice',
+   null,
+   jsonb_build_object(
+     'body', E'The material on this site is published for general information. It does not constitute investment, legal, tax or financial advice, and nothing on it is an offer or a commitment.\n\nDescriptions of our businesses, capacity and performance are indicative and may change. Figures, dates and availability of inventory should be confirmed directly with the relevant operating business before you rely on them.'
+   ),
+   'default','default',30,false),
+
+  ('terms-liability','prose',null,
+   'Liability',
+   'The limits of what we accept',
+   null,
+   jsonb_build_object(
+     'body', E'To the extent permitted by law, we are not liable for loss arising from reliance on information published here, or from any interruption to the availability of this site.\n\nNothing in these terms limits liability that cannot lawfully be limited. These terms are governed by the laws of the jurisdiction in which the group is registered, and the courts of that jurisdiction have exclusive jurisdiction.'
+   ),
+   'muted','default',40,false)
+  ) as v(section_key, section_type, eyebrow, heading, subheading, summary, content, background, layout, sort_order, is_required)
+ where p.slug = 'legal/terms'
+on conflict (page_id, section_key) do update
+   set heading = excluded.heading, subheading = excluded.subheading,
+       content = excluded.content, sort_order = excluded.sort_order;

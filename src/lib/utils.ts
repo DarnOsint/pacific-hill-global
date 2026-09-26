@@ -1,6 +1,8 @@
 /**
  * Small shared utilities.
  */
+import type { Route } from "next";
+
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 
@@ -129,6 +131,37 @@ export function safeHref(href: string | null | undefined, fallback = "#"): strin
     return href;
   }
   return fallback;
+}
+
+/**
+ * A link target that came out of the database.
+ *
+ * `typedRoutes` proves at compile time that every literal href matches a real
+ * page, which is genuinely valuable — but it can only do that for hrefs written
+ * in source. A CTA stored in `website_sections.cta_href`, or a sector slug from
+ * `business_units.slug`, is a string this compiler has never seen.
+ *
+ * So the unprovable cases funnel through one function instead of scattering
+ * `as Route` across the marketing components. The cast is confined here, the
+ * value is still run through `safeHref` first so a CMS editor cannot inject
+ * `javascript:` or an off-site URL into a button, and the fallback keeps a bad
+ * row from producing a dead link.
+ */
+export function cmsHref(href: string | null | undefined, fallback: Route = "/"): Route {
+  const value = safeHref(href, fallback as string);
+  return value as Route;
+}
+
+/**
+ * A first-party redirect target that is assembled at runtime.
+ *
+ * Same reasoning as `cmsHref`: `typedRoutes` verifies literal hrefs, but a
+ * redirect built from a `next` parameter is not a literal. Guard code runs
+ * before the destination is known to be reachable, so the cast marks that
+ * deliberate deferral in one documented place rather than at each call site.
+ */
+export function appRoute(path: string): Route {
+  return path as Route;
 }
 
 /* -------------------------------------------------------------------------- */

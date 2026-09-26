@@ -112,7 +112,8 @@ declare
     'public.vehicle_financials',
     'public.mining_financials',
     'public.agriculture_financials',
-    'public.dashboard_counters'
+    'public.dashboard_counters',
+    'public.public_org_units'
   ];
 begin
   foreach obj in array want loop

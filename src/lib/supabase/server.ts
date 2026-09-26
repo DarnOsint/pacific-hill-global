@@ -1,13 +1,17 @@
 /**
  * Server Supabase clients.
  *
- * Three distinct clients, three distinct trust levels. Confusing them is the
- * single most dangerous mistake available in this codebase, so each is named
- * for the authority it carries:
+ * Four distinct clients, four distinct trust levels. Confusing them is the
+ * single most dangerous mistake available in this codebase, so each is named for
+ * the authority it carries:
  *
+ *   createPublicClient()  — anon key, NO cookies, no session. For content that
+ *                           is public to every visitor. Being cookie-free is what
+ *                           lets those pages prerender at build time instead of
+ *                           becoming dynamic on every request.
  *   createServerClient()  — anon key + cookies. RLS applies as the signed-in
- *                           user. The default for Server Components and server
- *                           actions; nothing else should be used.
+ *                           user. The default for anything user-specific; nothing
+ *                           else should be used.
  *   createAdminClient()   — service role key, RLS BYPASSED. Server only, for
  *                           the few operations a user cannot perform for
  *                           themselves (admin bootstrap, webhook signature
@@ -28,6 +32,37 @@ import { cache } from "react";
 import { env, isSupabaseConfigured } from "@/lib/env";
 import { requireServiceRoleKey } from "@/lib/env.server";
 import type { Database } from "@/types/database";
+
+/* -------------------------------------------------------------------------- */
+/* Public (anon, cookie-free) — for content every visitor may read             */
+/* -------------------------------------------------------------------------- */
+
+let publicClient: SupabaseClient<Database> | null = null;
+
+/**
+ * Reads only what RLS already exposes to `anon`. There is no cookie adapter, so
+ * this client works inside `generateStaticParams` and at build time, and the
+ * resulting pages can be statically cached and served from the CDN.
+ *
+ * Never use this for user-specific data. It carries no session, so a row that
+ * is *not* publicly readable will return nothing rather than raising an error —
+ * which is the safe failure direction, but it will look like missing data.
+ */
+export function createPublicClient(): SupabaseClient<Database> | null {
+  if (!isSupabaseConfigured) return null;
+  if (publicClient) return publicClient;
+
+  publicClient = createSupabaseClient<Database>(env.supabaseUrl!, env.supabaseAnonKey!, {
+    auth: {
+      autoRefreshToken: false,
+      persistSession: false,
+      detectSessionInUrl: false,
+    },
+    global: { headers: { "X-Client-Info": "pacific-hill-global/public" } },
+  });
+
+  return publicClient;
+}
 
 /* -------------------------------------------------------------------------- */
 /* Server (session-scoped, RLS applies)                                        */
